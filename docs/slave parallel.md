@@ -1,4 +1,4 @@
-## Slave Parallel Type
+## Slave Parallel
 
 MySQL 8.0버전 기준으로
 
@@ -23,5 +23,12 @@ start slave;
 stop slave;
 set global slave_parallel_type='LOGICAL_CLOCK';
 set global replica_preserve_commit_order='ON'; 
+start slave;
+```
+
+**Worker 수** 변경방법
+```
+stop slave;
+set global slave_parallel_workers='{Worker 수}';
 start slave;
 ```
