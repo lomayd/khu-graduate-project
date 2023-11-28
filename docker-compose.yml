@@ -9,7 +9,7 @@
 # mysql -u root -p 입력 후 MYSQL_ROOT_PASSWORD 입력
 # show master status; 입력 후 File(ex) mysql-bin.000003) 과 Position(ex) 157) 확인
 
-# docker exec -it slave bash 로 Slave DB에 접속
+# docker exec -it slave{No.} bash 로 Slave DB에 접속
 # mysql -u root -p 입력 후 MYSQL_ROOT_PASSWORD 입력
 # 다음과 같이 입력:
 # CHANGE MASTER TO MASTER_HOST='{IPv4 Address}',
@@ -43,11 +43,11 @@ services:
       - master-volume:/var/lib/mysql-files
     networks:
       - master-slave
-  slave:
-    container_name: slave
+  slave1:
+    container_name: slave1
     build:
       context: ./
-      dockerfile: slave/Dockerfile
+      dockerfile: slave1/Dockerfile
     platform: linux/x86_64
     ports:
       - "3307:3306"
@@ -60,14 +60,80 @@ services:
       - --collation-server=utf8mb4_unicode_ci
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - slave-volume:/var/lib/mysql
-      - slave-volume:/var/lib/mysql-files
+      - slave1-volume:/var/lib/mysql
+      - slave1-volume:/var/lib/mysql-files
+    networks:
+      - master-slave
+  slave2:
+    container_name: slave2
+    build:
+      context: ./
+      dockerfile: slave2/Dockerfile
+    platform: linux/x86_64
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: LAB
+      MYSQL_ROOT_USERNAME: root
+      MYSQL_ROOT_PASSWORD:
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - slave2-volume:/var/lib/mysql
+      - slave2-volume:/var/lib/mysql-files
+    networks:
+      - master-slave
+  slave3:
+    container_name: slave3
+    build:
+      context: ./
+      dockerfile: slave3/Dockerfile
+    platform: linux/x86_64
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_DATABASE: LAB
+      MYSQL_ROOT_USERNAME: root
+      MYSQL_ROOT_PASSWORD:
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - slave3-volume:/var/lib/mysql
+      - slave3-volume:/var/lib/mysql-files
+    networks:
+      - master-slave
+  slave4:
+    container_name: slave4
+    build:
+      context: ./
+      dockerfile: slave4/Dockerfile
+    platform: linux/x86_64
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_DATABASE: LAB
+      MYSQL_ROOT_USERNAME: root
+      MYSQL_ROOT_PASSWORD:
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - slave4-volume:/var/lib/mysql
+      - slave4-volume:/var/lib/mysql-files
     networks:
       - master-slave
 
 volumes:
   master-volume:
-  slave-volume:
+  slave1-volume:
+  slave2-volume:
+  slave3-volume:
+  slave4-volume:
 
 networks:
   master-slave:
